@@ -44,7 +44,7 @@ position_sprite:
 	
 	mov r3, r3, LSL #14		@ shift size left 14 bits
 	orr r1, r1, r3			@ combine rightmost two bits of size with x position
-	strh r1, [r0], #2		@ store halfword in object attribute memory
+	strh r1, [r0, #2]		@ store halfword in object attribute memory
 	
 	mov r3, r3, LSR #2		@ shift size right 2 bits
 	and r3, r3, #0xC000		@ chop off rightmost two bits of size
