@@ -1,16 +1,16 @@
 @ Define sprite sizes
-.set SIZE_8X8 0x00
-.set SIZE_16X16 0x01
-.set SIZE_32X32 0x02
-.set SIZE_64X64 0x03
-.set SIZE_16X8 0x04
-.set SIZE_32X8 0x05
-.set SIZE_32X16 0x06
-.set SIZE_64X32 0x07
-.set SIZE_8X16 0x08
-.set SIZE_8X32 0x09
-.set SIZE_16X32 0x0A
-.set SIZE_32X64 0x0B
+.set SIZE_8X8,		0x00
+.set SIZE_16X16,	0x01
+.set SIZE_32X32,	0x02
+.set SIZE_64X64,	0x03
+.set SIZE_16X8,		0x04
+.set SIZE_32X8,		0x05
+.set SIZE_32X16,	0x06
+.set SIZE_64X32,	0x07
+.set SIZE_8X16,		0x08
+.set SIZE_8X32,		0x09
+.set SIZE_16X32,	0x0A
+.set SIZE_32X64,	0x0B
 
 .align 4
 
@@ -53,4 +53,5 @@ position_sprite:
 	
 	bx r14					@ return to caller
 	
+.ltorg 
 	
