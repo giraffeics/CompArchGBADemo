@@ -22,6 +22,7 @@ main:
 	
 	bl ball_init	@ initialize the ball
 	bl hoop_init	@ initialize the hoop
+	bl message_init	@ initialize the message
 	
 	bl configure_interrupts	@ set up interrupts
 	
@@ -32,6 +33,7 @@ infin:
 	bl rng_update	@ update pseudorandom number generator
 	bl hoop_update	@ update hoop
 	bl ball_update	@ update ball
+	bl message_update	@ update message
 	
 	b infin
 	
@@ -40,6 +42,7 @@ infin:
 .include "graphics.s"
 .include "ball.s"
 .include "hoop.s"
+.include "message.s"
 .include "interrupts.s"
 .include "rng.s"
 
