@@ -52,7 +52,7 @@ hoop_update:
 	
 	@ load hoop x position into r1
 	ldr		r0, =hoop_base
-	ldr		r1, [r0, #hoop_x]
+	ldrh	r1, [r0, #hoop_x]
 	
 	@ test left & right inputs
 	tst		r3, #0b00010000	@ bit test right button
@@ -64,7 +64,7 @@ hoop_update:
 	strh	r1, [r0, #hoop_x]
 	
 	@ load hoop y position into r2
-	ldr 	r2, [r0, #hoop_y]
+	ldrh 	r2, [r0, #hoop_y]
 	
 	@ test up & down inputs
 	tst		r3, #0b10000000	@ bit test down button
