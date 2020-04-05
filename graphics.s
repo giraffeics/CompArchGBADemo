@@ -45,6 +45,11 @@ position_sprite:
 	mov r0, r0, LSL #3		@ shift sprite number left three bits
 	add r0, r0, #0x07000000	@ add base address of object attribute memory
 	
+	ldr r4, =0x01FF			@ sanitize inputs by chopping off high parts
+	and r1, r1, r4
+	ldr r4, =0x00FF
+	and r2, r2, r4
+	
 	mov r3, r3, LSL #14		@ shift size left 14 bits
 	orr r1, r1, r3			@ combine rightmost two bits of size with x position
 	strh r1, [r0, #2]		@ store halfword in object attribute memory
