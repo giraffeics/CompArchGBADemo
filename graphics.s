@@ -1,3 +1,6 @@
+.arm
+.text
+
 @ Define sprite sizes
 .set SIZE_8X8,		0x00
 .set SIZE_16X16,	0x01
@@ -55,3 +58,18 @@ position_sprite:
 	
 .ltorg 
 	
+.align 4
+
+	@ ARGUMENTS:
+	@ r0: sprite number
+	@ r1: tile number
+	@ r2: palette number
+	@ r3: priority
+configure_sprite:
+	mov 	r0, r0, LSL #3		@ shift sprite number left three bits
+	add 	r0, r0, #0x07000000	@ add base address of object attribute memory
+	orr 	r1, r1, r2, LSL #12	@ combine palette with tile number
+	orr		r1, r1, r3, LSL #10	@ combine priority with palette & tile number
+	strh	r1, [r0, #4]		@ store in OAM
+	
+	bx r14						@ return to caller
