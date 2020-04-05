@@ -32,10 +32,14 @@ ball_init:
 	bl position_sprite
 	
 	ldr r0, =ball_base
-	mov r1, #00			@ initialize x position to 0
+	mov r1, #0x0000				@ initialize x position to 0
 	str r1, [r0, #ball_x]
-	mov r1, #12			@ initialize y position to 12
+	mov r1, #0x0C00				@ initialize y position to 12
 	str r1, [r0, #ball_y]
+	mov r1, #0x0100
+	str r1, [r0, #ball_hspeed]	@ initialize hspeed to 1
+	mov r1, #0x0080
+	str r1, [r0, #ball_vspeed]	@ initialize vspeed to 0.5
 	
 	@ pop return address from stack
 	ldmia sp!,{r14}
@@ -53,12 +57,19 @@ ball_update:
 	@ load and update x position
 	ldr r0, =ball_base
 	ldr r1, [r0, #ball_x]
-	add r1, r1, #1
-	and r1, r1, #0xFF
+	ldr r3, [r0, #ball_hspeed]
+	add r1, r1, r3
 	str r1, [r0, #ball_x]
 	
-	@ load y position and call position_sprite
+	@ load and update y position
 	ldr r2, [r0, #ball_y]
+	ldr r3, [r0, #ball_vspeed]
+	add r2, r2, r3
+	str r2, [r0, #ball_y]
+	
+	@ shift out subpixel positions and call position_sprite
+	mov r1, r1, LSR #8
+	mov r2, r2, LSR #8
 	mov r0, #0
 	mov r3, #SIZE_16X16
 	bl position_sprite
