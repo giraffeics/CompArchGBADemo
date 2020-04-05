@@ -31,15 +31,7 @@ ball_init:
 	mov r3, #SIZE_16X16
 	bl position_sprite
 	
-	ldr r0, =ball_base
-	mov r1, #0x0000				@ initialize x position to 0
-	str r1, [r0, #ball_x]
-	mov r1, #0x0C00				@ initialize y position to 12
-	str r1, [r0, #ball_y]
-	mov r1, #0x0100
-	str r1, [r0, #ball_hspeed]	@ initialize hspeed to 1
-	mov r1, #0x0080
-	str r1, [r0, #ball_vspeed]	@ initialize vspeed to 0.5
+	bl ball_throw	@ throw the ball, initializing x, y, hspeed, vspeed
 	
 	@ pop return address from stack
 	ldmia sp!,{r14}
@@ -73,6 +65,41 @@ ball_update:
 	mov r0, #0
 	mov r3, #SIZE_16X16
 	bl position_sprite
+	
+	@ adjust vspeed to account for gravity
+	ldr r0, =ball_base
+	ldr r1, [r0, #ball_vspeed]
+	add r1, r1, #0x15
+	str r1, [r0, #ball_vspeed]
+	
+	@ rethrow ball if it has fallen off of the screen
+	ldr r1, [r0, #ball_y]
+	mov r2, #0xA000
+	cmp r1, r2
+	blge ball_throw
+	
+	@ pop return address from stack
+	ldmia sp!,{r14}
+	bx r14	@ return to caller
+	
+.ltorg
+
+	@ ARGUMENTS: none
+	@ Uses r0, r1, r2
+	@ Returns x, y in r1, r2
+ball_throw:
+	@ push return address onto stack
+	stmdb sp!,{r14}
+	
+	ldr r0, =ball_base
+	mov r1, #0x0210
+	str r1, [r0, #ball_hspeed]	@ initialize hspeed to 2+1/16
+	ldr r1, =-0x0500
+	str r1, [r0, #ball_vspeed]	@ initialize vspeed to -5
+	mov r1, #0x0000				
+	str r1, [r0, #ball_x]		@ initialize x position to 0
+	mov r2, #0xA000				
+	str r2, [r0, #ball_y]		@ initialize y position to 160
 	
 	@ pop return address from stack
 	ldmia sp!,{r14}
