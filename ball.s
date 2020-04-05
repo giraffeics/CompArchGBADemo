@@ -18,10 +18,10 @@ ball_init:
 	stmdb sp!,{r14}
 
 	@ configure sprite
-	mov r0, #00
-	mov r1, #02
-	mov r2, #00
-	mov r3, #00
+	mov r0, #00		@ sprite #0
+	mov r1, #02		@ tile #2
+	mov r2, #00		@ palette #0
+	mov r3, #01		@ priority #1
 	bl configure_sprite
 	
 	@ position sprite

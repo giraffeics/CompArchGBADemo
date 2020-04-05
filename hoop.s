@@ -16,10 +16,10 @@ hoop_init:
 	stmdb sp!,{r14}
 
 	@ configure sprite
-	mov r0, #01
-	mov r1, #04
-	mov r2, #00
-	mov r3, #00
+	mov r0, #01		@ sprite #1
+	mov r1, #04		@ tile #2
+	mov r2, #00		@ palette #0
+	mov r3, #02		@ priority #2
 	bl configure_sprite
 	
 	@ position sprite
