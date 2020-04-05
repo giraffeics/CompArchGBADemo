@@ -49,6 +49,7 @@ main:
 infin:
 	swi 0x050000	@ wait for VBlank; overwrites r0 and r1
 	
+	bl hoop_update	@ update hoop
 	bl ball_update	@ update ball
 	
 	b infin

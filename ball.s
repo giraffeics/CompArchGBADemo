@@ -31,6 +31,12 @@ ball_init:
 	mov r3, #SIZE_16X16
 	bl position_sprite
 	
+	ldr r0, =ball_base
+	mov r1, #00			@ initialize x position to 0
+	str r1, [r0, #ball_x]
+	mov r1, #12			@ initialize y position to 12
+	str r1, [r0, #ball_y]
+	
 	@ pop return address from stack
 	ldmia sp!,{r14}
 	
@@ -44,12 +50,14 @@ ball_update:
 	@ push return address onto stack
 	stmdb sp!,{r14}
 
+	@ load and update x position
 	ldr r0, =ball_base
 	ldr r1, [r0, #ball_x]
 	add r1, r1, #1
 	and r1, r1, #0xFF
 	str r1, [r0, #ball_x]
 	
+	@ load y position and call position_sprite
 	ldr r2, [r0, #ball_y]
 	mov r0, #0
 	mov r3, #SIZE_16X16
@@ -58,4 +66,6 @@ ball_update:
 	@ pop return address from stack
 	ldmia sp!,{r14}
 	bx r14	@ return to caller
+	
+.ltorg
 	

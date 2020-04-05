@@ -35,3 +35,15 @@ hoop_init:
 	bx r14	@ return to caller
 
 .ltorg
+
+hoop_update:
+	@ push return address onto stack
+	stmdb sp!,{r14}
+	
+	@ not doing anything yet
+	
+	@ pop return address from stack
+	ldmia sp!,{r14}
+	bx r14	@ return to caller
+	
+.ltorg
