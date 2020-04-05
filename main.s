@@ -49,15 +49,7 @@ main:
 infin:
 	swi 0x050000	@ wait for VBlank; overwrites r0 and r1
 	
-	add r6, r6, #1
-	and r6, r6, #0xFF
-	
-	@ position sprite 1
-	mov r0, #0
-	mov r1, r6
-	mov r2, #12
-	mov r3, #SIZE_16X16
-	bl position_sprite
+	bl ball_update	@ update ball
 	
 	b infin
 	

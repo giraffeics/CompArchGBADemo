@@ -1,10 +1,19 @@
+.arm
+.text
 
+	@ Variables for the hoop
+.comm hoop_base, 16
+
+.set hoop_x, 0
+.set hoop_y, 4
+
+.align 4
 
 	@ ARGUMENTS: none
 	@ Uses r0, r1, r2, r3
 hoop_init:
 	@ push return address onto stack
-	str	r14, [sp, #-4]!
+	stmdb sp!,{r14}
 
 	@ configure sprite
 	mov r0, #01
@@ -21,6 +30,8 @@ hoop_init:
 	bl position_sprite
 	
 	@ pop return address from stack
-	ldr	r14, [sp], #4
+	ldmia sp!,{r14}
 	
 	bx r14	@ return to caller
+
+.ltorg
