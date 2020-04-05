@@ -62,6 +62,20 @@ position_sprite:
 	bx r14					@ return to caller
 	
 .ltorg 
+
+.align 4
+
+	@ ARGUMENTS:
+	@ r0: sprite number
+hide_sprite:
+	mov 	r0, r0, LSL #3		@ shift sprite number left three bits
+	add 	r0, r0, #0x07000000	@ add base address of object attribute memory
+	mov		r1, #0x0200
+	strh	r1, [r0]			@ store "hide sprite" flag into OAM
+	
+	bx r14						@ return to caller
+
+.ltorg
 	
 .align 4
 
