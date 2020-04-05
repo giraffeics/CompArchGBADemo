@@ -93,21 +93,22 @@ ball_throw:
 	
 	bl 		rng_generate			@ get rng values into r2 and r3
 	and		r2, r0, #0x7F
-	and		r2, r0, #0x07F0			
-	mov		r2, r2, LSR #4
+	and		r3, r0, #0x07F0			
+	mov		r3, r3, LSR #4
 	
-	add		r2, r2, #0x80			@ range of two RNG values = 128-255
-	add		r3, r3, #0x80
+	add		r2, r2, #0x80			@ range of r2 values = 128-255
+	add		r3, r3, #0x100			@ range of r3 values = 256-384
 	
 	ldr 	r0, =ball_base
-	mov 	r1, r2, LSL #1			@ randomize hspeed
-	add		r1, r2
+	mov 	r1, r2, LSL #1			@ set hspeed = r2 * 2.5
+	add		r1, r2, LSR #1
 	str 	r1, [r0, #ball_hspeed]	@ store random hspeed
 	
 	mov		r1, #0
-	sub 	r1, r1, r3, LSL #3		@ randomize vspeed to a negative number
-	sub 	r1, r1, r3, LSL #1
-	str 	r1, [r0, #ball_vspeed]	@ initialize vspeed to -5
+	sub 	r1, r1, r3, LSL #1		@ set vspeed = r3 * -3.5
+	sub 	r1, r1, r3
+	sub 	r1, r1, r3, LSR #1
+	str 	r1, [r0, #ball_vspeed]	@ store random vspeed
 	mov 	r1, #0x0000				
 	str 	r1, [r0, #ball_x]		@ initialize x position to 0
 	mov 	r2, #0xA000				
