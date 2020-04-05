@@ -29,6 +29,7 @@ main:
 infin:
 	swi 0x050000	@ wait for VBlank; overwrites r0 and r1
 	
+	bl rng_update	@ update pseudorandom number generator
 	bl hoop_update	@ update hoop
 	bl ball_update	@ update ball
 	
@@ -40,6 +41,7 @@ infin:
 .include "ball.s"
 .include "hoop.s"
 .include "interrupts.s"
+.include "rng.s"
 
 .align 4
 SPR_TILE_DATA:

@@ -88,17 +88,34 @@ ball_update:
 	@ Uses r0, r1, r2
 	@ Returns x, y in r1, r2
 ball_throw:
-	ldr r0, =ball_base
-	mov r1, #0x0210
-	str r1, [r0, #ball_hspeed]	@ initialize hspeed to 2+1/16
-	ldr r1, =-0x0500
-	str r1, [r0, #ball_vspeed]	@ initialize vspeed to -5
-	mov r1, #0x0000				
-	str r1, [r0, #ball_x]		@ initialize x position to 0
-	mov r2, #0xA000				
-	str r2, [r0, #ball_y]		@ initialize y position to 160
+	@ push return address onto stack
+	stmdb 	sp!,{r14}
 	
-	bx r14	@ return to caller
+	bl 		rng_generate			@ get rng values into r2 and r3
+	and		r2, r0, #0x7F
+	and		r2, r0, #0x07F0			
+	mov		r2, r2, LSR #4
+	
+	add		r2, r2, #0x80			@ range of two RNG values = 128-255
+	add		r3, r3, #0x80
+	
+	ldr 	r0, =ball_base
+	mov 	r1, r2, LSL #1			@ randomize hspeed
+	add		r1, r2
+	str 	r1, [r0, #ball_hspeed]	@ store random hspeed
+	
+	mov		r1, #0
+	sub 	r1, r1, r3, LSL #3		@ randomize vspeed to a negative number
+	sub 	r1, r1, r3, LSL #1
+	str 	r1, [r0, #ball_vspeed]	@ initialize vspeed to -5
+	mov 	r1, #0x0000				
+	str 	r1, [r0, #ball_x]		@ initialize x position to 0
+	mov 	r2, #0xA000				
+	str 	r2, [r0, #ball_y]		@ initialize y position to 160
+	
+	@ pop return address from stack
+	ldmia 	sp!,{r14}
+	bx 		r14	@ return to caller
 	
 .ltorg
 	
