@@ -88,9 +88,6 @@ ball_update:
 	@ Uses r0, r1, r2
 	@ Returns x, y in r1, r2
 ball_throw:
-	@ push return address onto stack
-	stmdb sp!,{r14}
-	
 	ldr r0, =ball_base
 	mov r1, #0x0210
 	str r1, [r0, #ball_hspeed]	@ initialize hspeed to 2+1/16
@@ -101,8 +98,6 @@ ball_throw:
 	mov r2, #0xA000				
 	str r2, [r0, #ball_y]		@ initialize y position to 160
 	
-	@ pop return address from stack
-	ldmia sp!,{r14}
 	bx r14	@ return to caller
 	
 .ltorg
