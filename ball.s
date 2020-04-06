@@ -98,18 +98,17 @@ ball_update:
 	ldr r4, [r0, #hoop_y]
 	
 	@ check collision
-	@ ball is 13x13, hoop is 22 wide
+	@ ball is 13x13, hoop is 20 wide
 	@ hoop is offset by (5, 18)
 	@ check that ball center is in the hoop
-	@ (ball_x + 13/2) - hoop_x - 5 >= 0; 		ball_x - hoop_x + 1 >= 0
-	@ (ball_x + 13/2) - hoop_x - 5 - 22 <= 0; 	ball_x - hoop_x - 20 <= 0
+	@ (ball_x + 13/2) - hoop_x - 6 >= 0; 		ball_x - hoop_x + 0 >= 0
+	@ (ball_x + 13/2) - hoop_x - 6 - 20 <= 0; 	ball_x - hoop_x - 19 <= 0
 	@ ball_y - hoop_y - 18 <= 0
 	@ ball_y - hoop_y - 18 + 13 >= 0
 	@ also, ball vspeed must be positive
-	sub		r1, r1, r3
-	adds	r1, r1, #1
+	subs	r1, r1, r3
 	blt		ball_update_end	@ jump to end if (ball_x - hoop_x + 1 >= 0) fails
-	subs	r1, r1, #21
+	subs	r1, r1, #19
 	bgt		ball_update_end	@ jump to end if (ball_x - hoop_x - 20 <= 0) fails
 	sub		r1, r2, r4
 	subs	r1, r1, #18
