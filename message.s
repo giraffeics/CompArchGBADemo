@@ -9,7 +9,7 @@
 .set msg_timer, 8
 .set msg_sprite, 12
 
-.align 4
+.align 2
 
 	@ ARGUMENTS: none
 	@ Uses r0, r1
@@ -22,7 +22,7 @@ message_init:
 	
 .ltorg
 
-.align 4
+.align 2
 
 	@ ARGUMENTS: none
 	@ Uses r0, r1, r2, r3
@@ -57,7 +57,7 @@ message_oof:
 
 .ltorg	
 
-.align 4
+.align 2
 
 	@ ARGUMENTS: none
 	@ Uses r0, r1, r2, r3
@@ -92,7 +92,7 @@ message_score:
 
 .ltorg	
 
-.align 4
+.align 2
 
 	@ ARGUMENTS: none
 message_update:

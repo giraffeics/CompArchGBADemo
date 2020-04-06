@@ -2,6 +2,8 @@
 .text
 .global main
 
+.align 2
+
 main:
 	@ set up REG_DISPCNT (the LCD controller)
 	mov r0, #0x4000000
@@ -46,10 +48,10 @@ infin:
 .include "interrupts.s"
 .include "rng.s"
 
-.align 4
+.align 2
 SPR_TILE_DATA:
 .incbin "sprites.bin"
 
-.align 4
+.align 2
 SPR_PALETTE_DATA:
 .incbin "sprites.pal"

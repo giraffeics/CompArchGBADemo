@@ -15,7 +15,7 @@
 .set SIZE_16X32,	0x0A
 .set SIZE_32X64,	0x0B
 
-.align 4
+.align 2
 
 	@ ARGUMENTS:
 	@ r0: base address in VRAM
@@ -34,7 +34,7 @@ vram_copy_loop:
 
 .ltorg 
 
-.align 4
+.align 2
 
 	@ ARGUMENTS:
 	@ r0: sprite number
@@ -63,7 +63,7 @@ position_sprite:
 	
 .ltorg 
 
-.align 4
+.align 2
 
 	@ ARGUMENTS:
 	@ r0: sprite number
@@ -77,7 +77,7 @@ hide_sprite:
 
 .ltorg
 	
-.align 4
+.align 2
 
 	@ ARGUMENTS:
 	@ r0: sprite number

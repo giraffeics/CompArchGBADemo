@@ -1,6 +1,8 @@
 .arm
 .text
 
+.align 2
+
 configure_interrupts:
 	@ set interrupt handler
 	ldr r0, =0x03007FFC

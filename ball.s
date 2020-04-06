@@ -10,7 +10,7 @@
 .set ball_vspeed, 12
 .set ball_scored, 16
 
-.align 4
+.align 2
 
 	@ ARGUMENTS: none
 	@ Uses r0, r1, r2, r3
