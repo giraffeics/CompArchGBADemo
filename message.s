@@ -26,6 +26,41 @@ message_init:
 
 	@ ARGUMENTS: none
 	@ Uses r0, r1, r2, r3
+message_oof:
+	@ push return address onto stack
+	stmdb sp!,{r14}
+	
+	mov		r0, #2	@ sprite #2
+	mov		r1, #16	@ tile #16
+	mov		r2, #1	@ palette #1
+	mov		r3, #0	@ priority #0
+	bl		configure_sprite	@ configure sprite 2
+	
+	bl		rng_generate		@ get a random number
+	
+	mov		r1, r0, LSR #4		@ shift RNG value right 4 bits into r1
+	and		r1, r1, #0x7F		@ select lowest 7 bits
+	add		r1, r1, r1, LSR #2	@ multiply r1 by 1.25
+	
+	and		r2, r0, #0x3F		@ select lowest six bits for r2
+	add		r2, r2, r2, LSR #1	@ multiply r2 by 1.5
+	
+	ldr		r0, =msg_base
+	str		r1, [r0, #msg_x]
+	str		r2, [r0, #msg_y]
+	mov		r1, #0
+	str		r1, [r0, #msg_timer]
+	
+	@ pop return address from stack
+	ldmia sp!,{r14}
+	bx r14				@ return to caller
+
+.ltorg	
+
+.align 4
+
+	@ ARGUMENTS: none
+	@ Uses r0, r1, r2, r3
 message_score:
 	@ push return address onto stack
 	stmdb sp!,{r14}
@@ -36,11 +71,18 @@ message_score:
 	mov		r3, #0	@ priority #0
 	bl		configure_sprite	@ configure sprite 2
 	
+	bl		rng_generate		@ get a random number
+	
+	mov		r1, r0, LSR #4		@ shift RNG value right 4 bits into r1
+	and		r1, r1, #0x7F		@ select lowest 7 bits
+	add		r1, r1, r1, LSR #2	@ multiply r1 by 1.25
+	
+	and		r2, r0, #0x3F		@ select lowest six bits for r2
+	add		r2, r2, r2, LSR #1	@ multiply r2 by 1.5
+	
 	ldr		r0, =msg_base
-	mov		r1, #30
 	str		r1, [r0, #msg_x]
-	mov		r1, #20
-	str		r1, [r0, #msg_y]
+	str		r2, [r0, #msg_y]
 	mov		r1, #0
 	str		r1, [r0, #msg_timer]
 	
