@@ -75,7 +75,6 @@ rng_generate:
 	ldr		r1, [r3, #rng_rotsalt]
 	mov		r1, r1, ROR #11
 	eor		r1, r1, r2
-	mov		r8, r1	@ mov r1 into r8 for debugging reasons
 	str		r1, [r3, #rng_rotsalt]
 	
 	@ load the previous RNG value, xor with rotating salt, store
