@@ -22,6 +22,7 @@ main:
 	mov r2, #0x8000
 	bl vram_copy
 	
+	bl rng_init		@ initialize the pseudorandom number generator
 	bl ball_init	@ initialize the ball
 	bl hoop_init	@ initialize the hoop
 	bl message_init	@ initialize the message
