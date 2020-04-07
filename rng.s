@@ -28,6 +28,8 @@ rng_init:
 	
 	@ return to caller
 	bx		r14
+	
+.ltorg
 
 	@ ARGUMENTS: none
 	@ Updates pseudorandom number generator
