@@ -154,30 +154,34 @@ ball_throw:
 	@ push return address onto stack
 	stmdb 	sp!,{r14}
 	
-	bl 		rng_generate			@ get rng values into r2 and r3
-	and		r2, r0, #0x7F
-	and		r3, r0, #0x07F0			
-	mov		r3, r3, LSR #4
+	@ get rng values into r2 and r3
+	bl 		rng_generate
+	and		r2, r0, #0x3F			@ use right byte of the RNG halfword for hspeed
+	and		r3, r0, #0x3F00			@ use left byte of the RNG halfword for vspeed
+	mov		r3, r3, LSR #8
 	
-	add		r2, r2, #0x80			@ range of r2 values = 128-255
-	add		r3, r3, #0x100			@ range of r3 values = 256-384
-	
+	@ load base address of ball variables
 	ldr 	r0, =ball_base
-	mov 	r1, r2, LSL #1			@ set hspeed = r2 * 2.5
-	add		r1, r2, LSR #1
-	str 	r1, [r0, #ball_hspeed]	@ store random hspeed
 	
-	mov		r1, #0
-	sub 	r1, r1, r3, LSL #1		@ set vspeed = r3 * -3.5
-	sub 	r1, r1, r3
-	sub 	r1, r1, r3, LSR #1
-	str 	r1, [r0, #ball_vspeed]	@ store random vspeed
+	@ set hspeed = (rand(0...63) + 64) * 5; final range = 320...635
+	mov		r1, #5
+	add		r2, r2, #64
+	mul		r1, r2, r1
+	str 	r1, [r0, #ball_hspeed]
+	
+	@ set vspeed = (rand(0...63) + 128) * -7; final range = -896...-1337
+	ldr		r1, =-7	
+	add		r3, r3, #0x80
+	mul		r1, r3, r1
+	str 	r1, [r0, #ball_vspeed]
+	
+	@ initialize x, y position to the bottom-left of the screen
 	mov 	r1, #0x0000				
 	str 	r1, [r0, #ball_x]		@ initialize x position to 0
 	mov 	r2, #0xA000				
 	str 	r2, [r0, #ball_y]		@ initialize y position to 160
 	
-	@ pop return address from stack
+	@ restore stack and return to caller
 	ldmia 	sp!,{r14}
 	bx 		r14	@ return to caller
 	
