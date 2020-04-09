@@ -56,6 +56,7 @@ rng_update:
 	@ generate and store frame salt variable
 	mov		r1, r1, LSL #4
 	orr		r1, r1, r2
+	eor		r1, r1, #0xFF
 	strb	r1, [r0, #rng_framesalt]
 	
 	bx 		r14
