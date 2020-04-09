@@ -1,12 +1,12 @@
 .arm
 .text
 
-.comm rng, 8	@ allocate 4 bytes for rng
+.comm rng, 9, 4		@ allocate 9 bytes for rng
 
 .set rng_last, 		0	@ last generated RNG value
 .set rng_counter, 	2	@ frame counter
-.set rng_framesalt, 3	@ 8-bit "frame salt" generated each frame by rng_update
 .set rng_rotsalt,	4	@ 32-bit "rotating salt"
+.set rng_framesalt, 8	@ 8-bit "frame salt" generated each frame by rng_update
 
 	@ ARGUMENTS: none
 	@ Initializes pseudorandom number generator
@@ -42,10 +42,16 @@ rng_update:
 	mov		r1, r1, ROR #19
 	str		r1, [r0, #rng_rotsalt]
 	
-	@ increment the counter
-	ldrb	r1, [r0, #rng_counter]
+	@ load, increment, and store the counter
+	ldrh	r1, [r0, #rng_counter]
 	add		r1, r1, #1
-	strb	r1, [r0, #rng_counter]
+	strh	r1, [r0, #rng_counter]
+	
+	@ load time salt into r3; this will change every ~2 seconds
+	ldr		r3, =TIME_SALTS
+	mov		r2, r1, LSR #7
+	and		r2, r2, #0x0F
+	ldrb	r3, [r3, r2]
 	
 	@ load D-Pad inputs into r2
 	ldr		r2, =0x04000130
@@ -54,9 +60,9 @@ rng_update:
 	and		r2, r2, #0x0F
 	
 	@ generate and store frame salt variable
-	mov		r1, r1, LSL #4
-	orr		r1, r1, r2
-	eor		r1, r1, #0xFF
+	mov		r1, r1, LSL #4	@ incorporate frame counter
+	orr		r1, r1, r2		@ incorporate D-Pad inputs
+	eor		r1, r1, r3		@ incorporate time salt
 	strb	r1, [r0, #rng_framesalt]
 	
 	bx 		r14
@@ -92,3 +98,9 @@ rng_generate:
 	bx r14		@ return to caller
 	
 .ltorg
+
+TIME_SALTS:
+	.byte 47, 177, 158, 64
+	.byte 67, 71, 255, 160
+	.byte 233, 191, 190, 207
+	.byte 60, 40, 203, 133
