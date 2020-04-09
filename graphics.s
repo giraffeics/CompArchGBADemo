@@ -42,24 +42,29 @@ vram_copy_loop:
 	@ r2: y position
 	@ r3: sprite size
 position_sprite:
-	mov r0, r0, LSL #3		@ shift sprite number left three bits
-	add r0, r0, #0x07000000	@ add base address of object attribute memory
+	@ calculate base address of this sprite
+	mov r0, r0, LSL #3		
+	add r0, r0, #0x07000000
 	
-	ldr r4, =0x01FF			@ sanitize inputs by chopping off high parts
+	@ sanitize inputs by chopping off high parts
+	ldr r4, =0x01FF	
 	and r1, r1, r4
 	ldr r4, =0x00FF
 	and r2, r2, r4
 	
-	mov r3, r3, LSL #14		@ shift size left 14 bits
-	orr r1, r1, r3			@ combine rightmost two bits of size with x position
-	strh r1, [r0, #2]		@ store halfword in object attribute memory
+	@ combine size with x position, store in OAM
+	mov r3, r3, LSL #14
+	orr r1, r1, r3
+	strh r1, [r0, #2]
 	
-	mov r3, r3, LSR #2		@ shift size right 2 bits
-	and r3, r3, #0xC000		@ chop off rightmost two bits of size
-	orr r2, r2, r3			@ combine leftmost two bits of size with y position
-	strh r2, [r0]			@ store halfword in object attribute memory
+	@ combine size with y position, store in OAM
+	mov r3, r3, LSR #2	
+	and r3, r3, #0xC000	
+	orr r2, r2, r3	
+	strh r2, [r0]
 	
-	bx r14					@ return to caller
+	@ return to caller
+	bx r14
 	
 .ltorg 
 
@@ -68,12 +73,16 @@ position_sprite:
 	@ ARGUMENTS:
 	@ r0: sprite number
 hide_sprite:
-	mov 	r0, r0, LSL #3		@ shift sprite number left three bits
-	add 	r0, r0, #0x07000000	@ add base address of object attribute memory
-	mov		r1, #0x0200
-	strh	r1, [r0]			@ store "hide sprite" flag into OAM
+	@ calculate base address of this sprite
+	mov 	r0, r0, LSL #3
+	add 	r0, r0, #0x07000000
 	
-	bx r14						@ return to caller
+	@ set invisible flag in attribute 0
+	mov		r1, #0x0200
+	strh	r1, [r0]
+	
+	@ return to caller
+	bx r14
 
 .ltorg
 	
@@ -85,10 +94,14 @@ hide_sprite:
 	@ r2: palette number
 	@ r3: priority
 configure_sprite:
-	mov 	r0, r0, LSL #3		@ shift sprite number left three bits
-	add 	r0, r0, #0x07000000	@ add base address of object attribute memory
-	orr 	r1, r1, r2, LSL #12	@ combine palette with tile number
-	orr		r1, r1, r3, LSL #10	@ combine priority with palette & tile number
-	strh	r1, [r0, #4]		@ store in OAM
+	@ calculate base address of this sprite
+	mov 	r0, r0, LSL #3
+	add 	r0, r0, #0x07000000
 	
-	bx r14						@ return to caller
+	@ combine tile, palette, priority; store in OAM
+	orr 	r1, r1, r2, LSL #12
+	orr		r1, r1, r3, LSL #10	
+	strh	r1, [r0, #4]
+	
+	@ return to caller
+	bx r14	
